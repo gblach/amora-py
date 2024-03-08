@@ -22,7 +22,7 @@ classifiers = [
 dynamic = ["version"]
 
 [project.urls]
-Homepage = "https://codeberg.org/gblach/amora-py"
+Repository = "https://codeberg.org/gblach/amora-py"
 Issues = "https://codeberg.org/gblach/amora-py/issues"
 
 [tool.maturin]
