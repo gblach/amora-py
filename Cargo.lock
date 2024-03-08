@@ -14,7 +14,7 @@ dependencies = [
 
 [[package]]
 name = "amora-py"
-version = "0.1.0"
+version = "0.2.1"
 dependencies = [
  "amora-rs",
  "pyo3",
@@ -23,9 +23,9 @@ dependencies = [
 
 [[package]]
 name = "amora-rs"
-version = "0.1.0"
+version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "498e662ee9c282eb7afa21ebc446d02d83b2a5a9531abdb56de531f4d35af3f9"
+checksum = "872572d4d7a20a7e0a17568782e8b980000e715cccf95f43f381eb83ed50ee74"
 dependencies = [
  "base64",
  "chacha20poly1305",
@@ -42,9 +42,9 @@ checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 
 [[package]]
 name = "base64"
-version = "0.21.6"
+version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c79fed4cdb43e993fcdadc7e58a09fd0e3e649c4436fa11da71c9f1f3ee7feb9"
+checksum = "9475866fec1451be56a3c2400fd081ff546538961565ccb5b7142cbd22bc7a51"
 
 [[package]]
 name = "bitflags"

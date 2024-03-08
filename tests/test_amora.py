@@ -4,6 +4,7 @@
 
 import pytest
 import amora_py
+import time
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
 
 def test_amora_zero_new():
@@ -130,3 +131,35 @@ def test_amora_one_encryption_error():
 		"haJSerdTCt-zpa0XRS-sY5F4H1SZ5mwRzpWc4rXYMY1NIgz8DpsGTD-JAdqmsIgTo6SRYl4m8"
 	with pytest.raises(ValueError, match="EncryptionError"):
 		amora.decode(token, False)
+
+def test_amora_zero_meta_ok():
+	key = bytes([
+		0x4f, 0x99, 0x70, 0x66, 0x2f, 0xac, 0xd3, 0x7d,
+		0xc3, 0x6c, 0x0f, 0xd1, 0xda, 0xd0, 0x7e, 0xaa,
+		0x04, 0x7c, 0x28, 0x54, 0x58, 0x3c, 0x92, 0x0f,
+		0x52, 0x4b, 0x2b, 0x01, 0xd8, 0x40, 0x83, 0x1a,
+	])
+	amora = amora_py.Amora.amora_zero(key)
+	payload = "sample_payload_just_for_testing"
+	token = amora.encode(payload.encode(), 1)
+	now = int(time.time())
+	meta = amora_py.Amora.meta(token)
+	assert meta.version == amora_py.AmoraVer.Zero
+	assert meta.ttl == 1
+	assert meta.timestamp == now
+	assert meta.is_valid == True
+
+def test_amora_one_meta_expired():
+	token = "oQEAAGgmXpFevpAoQpgcC7AFgwmbHKDTABRGdPQxfsIymRJPN4VWZdALbFb_E3Jd8_xGAi" \
+		"haJSerdTCt-zpa0XRS-sY5F4H1SZ5mwRzpWc4rXYMY1NIgz8DpsGTD-JAdqmsIgTo6SRYl4m4"
+	meta = amora_py.Amora.meta(token)
+	assert meta.version == amora_py.AmoraVer.One
+	assert meta.ttl == 1
+	assert meta.timestamp == 1700169015
+	assert meta.is_valid == False
+
+def test_amora_one_meta_unsupported_version():
+	token = "ogEAAGgmXpFevpAoQpgcC7AFgwmbHKDTABRGdPQxfsIymRJPN4VWZdALbFb_E3Jd8_xGAi" \
+		"haJSerdTCt-zpa0XRS-sY5F4H1SZ5mwRzpWc4rXYMY1NIgz8DpsGTD-JAdqmsIgTo6SRYl4m4"
+	with pytest.raises(ValueError, match="UnsupportedVersion"):
+		meta = amora_py.Amora.meta(token)

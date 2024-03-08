@@ -10,13 +10,26 @@ use pyo3::exceptions::PyValueError;
 
 #[pymodule]
 fn amora_py(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+	m.add_class::<AmoraVer>()?;
 	m.add_class::<Amora>()?;
+	m.add_class::<AmoraMeta>()?;
 	Ok(())
+}
+
+#[pyclass]
+enum AmoraVer {
+	Zero = amora_rs::AmoraVer::Zero as isize,
+	One = amora_rs::AmoraVer::One as isize,
 }
 
 #[pyclass]
 struct Amora {
 	amora: amora_rs::Amora,
+}
+
+#[pyclass]
+struct AmoraMeta {
+	meta: amora_rs::AmoraMeta,
 }
 
 #[pymethods]
@@ -70,5 +83,43 @@ impl Amora {
 			Ok(decoded) => Ok(decoded),
 			Err(error) => Err(PyValueError::new_err(format!("{:?}", error))),
 		}
+	}
+
+	#[staticmethod]
+	fn meta(token: &str) -> PyResult<AmoraMeta> {
+		match amora_rs::Amora::meta(token) {
+			Ok(meta) => Ok(AmoraMeta { meta }),
+			Err(error) => Err(PyValueError::new_err(format!("{:?}", error))),
+		}
+	}
+}
+
+#[pymethods]
+impl AmoraMeta {
+	#[getter]
+	fn version(&self) -> AmoraVer {
+		match self.meta.version {
+			amora_rs::AmoraVer::Zero => AmoraVer::Zero,
+			amora_rs::AmoraVer::One => AmoraVer::One,
+		}
+	}
+
+	#[getter]
+	fn ttl(&self) -> u32 {
+		self.meta.ttl
+	}
+
+	#[getter]
+	fn timestamp(&self) -> u32 {
+		self.meta.timestamp
+	}
+
+	#[getter]
+	fn is_valid(&self) -> bool {
+		self.meta.is_valid
+	}
+
+	fn __str__(&self) -> PyResult<String> {
+		Ok(format!("{:?}", self.meta))
 	}
 }

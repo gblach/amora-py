@@ -89,3 +89,12 @@ token = amora.encode(payload.encode(), 1)
 decoded = amora.decode(token, True)
 decoded = bytes(decoded).decode()
 ```
+
+### Fetch metadata from the token
+
+```python
+token = "oAEAAE_X6GVaC7xve5xaaAaLiW1YPqHX9I1BNGbKnC7ArMke4G" \
+	"EU9MXCgU2U5jYAkJhDXQBqsO5tadCKyXZmI3mV-bpDFr1aQc1U";
+meta = amora_py.Amora.meta(token)
+print(meta)
+```
