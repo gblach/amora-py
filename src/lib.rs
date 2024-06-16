@@ -2,7 +2,6 @@
 //  License, v. 2.0. If a copy of the MPL was not distributed with this
 //  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-use amora_rs;
 use x25519_dalek::{PublicKey, StaticSecret};
 use pyo3::prelude::*;
 use pyo3::PyResult;
@@ -37,7 +36,7 @@ impl Amora {
 	#[staticmethod]
 	fn amora_zero(key: [u8; 32]) -> Amora {
 		let amora = amora_rs::Amora::amora_zero(&key);
-		Amora { amora: amora }
+		Amora { amora }
 	}
 
 	#[staticmethod]
@@ -53,13 +52,13 @@ impl Amora {
 		};
 
 		let amora = amora_rs::Amora::amora_one(secret_key, public_key);
-		Amora { amora: amora }
+		Amora { amora }
 	}
 
 	#[staticmethod]
 	fn amora_zero_from_str(key: &str) -> PyResult<Amora> {
 		match amora_rs::Amora::amora_zero_from_str(key) {
-			Ok(amora) => Ok(Amora { amora: amora }),
+			Ok(amora) => Ok(Amora { amora }),
 			Err(error) => Err(PyValueError::new_err(format!("{:?}", error))),
 		}
 	}
@@ -69,7 +68,7 @@ impl Amora {
 		-> PyResult<Amora> {
 
 		match amora_rs::Amora::amora_one_from_str(secret_key, public_key) {
-			Ok(amora) => Ok(Amora { amora: amora }),
+			Ok(amora) => Ok(Amora { amora }),
 			Err(error) => Err(PyValueError::new_err(format!("{:?}", error))),
 		}
 	}
