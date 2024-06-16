@@ -41,16 +41,8 @@ impl Amora {
 
 	#[staticmethod]
 	fn amora_one(secret_key: Option<[u8; 32]>, public_key: Option<[u8; 32]>) -> Amora {
-		let secret_key: Option<StaticSecret> = match secret_key {
-			Some(key) => Some(StaticSecret::from(key)),
-			None => None,
-		};
-
-		let public_key: Option<PublicKey> = match public_key {
-			Some(key) => Some(PublicKey::from(key)),
-			None => None,
-		};
-
+		let secret_key = secret_key.map(StaticSecret::from);
+		let public_key = public_key.map(PublicKey::from);
 		let amora = amora_rs::Amora::amora_one(secret_key, public_key);
 		Amora { amora }
 	}
