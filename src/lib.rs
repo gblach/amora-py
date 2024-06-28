@@ -8,14 +8,16 @@ use pyo3::PyResult;
 use pyo3::exceptions::PyValueError;
 
 #[pymodule]
-fn amora_py(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+//fn amora_py(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+fn amora_py(m: &Bound<'_, PyModule>) -> PyResult<()> {
 	m.add_class::<AmoraVer>()?;
 	m.add_class::<Amora>()?;
 	m.add_class::<AmoraMeta>()?;
 	Ok(())
 }
 
-#[pyclass]
+#[pyclass(eq, eq_int)]
+#[derive(PartialEq)]
 enum AmoraVer {
 	Zero = amora_rs::AmoraVer::Zero as isize,
 	One = amora_rs::AmoraVer::One as isize,
@@ -40,6 +42,7 @@ impl Amora {
 	}
 
 	#[staticmethod]
+	#[pyo3(signature = (secret_key=None, public_key=None))]
 	fn amora_one(secret_key: Option<[u8; 32]>, public_key: Option<[u8; 32]>) -> Amora {
 		let secret_key = secret_key.map(StaticSecret::from);
 		let public_key = public_key.map(PublicKey::from);
@@ -56,6 +59,7 @@ impl Amora {
 	}
 
 	#[staticmethod]
+	#[pyo3(signature = (secret_key=None, public_key=None))]
 	fn amora_one_from_str(secret_key: Option<&str>, public_key: Option<&str>)
 		-> PyResult<Amora> {
 
