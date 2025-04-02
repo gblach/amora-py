@@ -10,4 +10,4 @@ crate-type = ["cdylib"]
 [dependencies]
 amora-rs = "~0.2.1"
 x25519-dalek = { version = "2.0", features = ["getrandom", "static_secrets"] }
-pyo3 = { version = "0.22", features = ["extension-module"] }
+pyo3 = { version = "0.24", features = ["extension-module"] }
